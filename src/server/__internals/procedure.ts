@@ -20,7 +20,7 @@ export type SuperJSONTypedResponse<
 	U extends StatusCode = StatusCode,
 > = TypedResponse<SuperJSONParsedType<T>, U, "json">;
 
-export class Procedure<ctx = Record<string, unknown>> {
+export class Procedure<ctx = {}> {
 	private readonly middlewares: Middleware<ctx>[] = [];
 
 	/**
@@ -115,7 +115,7 @@ export class Procedure<ctx = Record<string, unknown>> {
 		}) =>
 			| SuperJSONTypedResponse<Output>
 			| Promise<SuperJSONTypedResponse<Output>>,
-	): QueryOperation<Record<string, unknown>, Output> {
+	): QueryOperation<{}, Output> {
 		return {
 			type: "query",
 			handler: fn as any,
@@ -133,7 +133,7 @@ export class Procedure<ctx = Record<string, unknown>> {
 			ctx: ctx;
 			c: Context<{ Bindings: Bindings }>;
 		}) => TypedResponse<Output> | Promise<TypedResponse<Output>>,
-	): MutationOperation<Record<string, unknown>, Output> {
+	): MutationOperation<{}, Output> {
 		return {
 			type: "mutation",
 			handler: fn as any,

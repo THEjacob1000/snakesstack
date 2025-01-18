@@ -25,11 +25,9 @@ export type QueryOperation<
 		ctx,
 		c,
 		input,
-	}: {
-		ctx: Ctx;
-		c: Context;
-		input: ZodInput;
-	}) => Promise<TypedResponse<Output>>;
+	}: { ctx: Ctx; c: Context; input: ZodInput }) => Promise<
+		TypedResponse<Output>
+	>;
 	middlewares: Middleware<any>[];
 };
 
@@ -42,11 +40,9 @@ export type MutationOperation<
 	handler: <Input, Output>({
 		ctx,
 		c,
-	}: {
-		ctx: Input;
-		c: Context;
-		input: ZodInput;
-	}) => Promise<TypedResponse<Output>>;
+	}: { ctx: Input; c: Context; input: ZodInput }) => Promise<
+		TypedResponse<Output>
+	>;
 	middlewares: Middleware<any>[];
 };
 
