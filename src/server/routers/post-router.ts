@@ -1,31 +1,35 @@
-import { HTTPException } from "hono/http-exception"
-import { z } from "zod"
-import { router } from "../__internals/router"
-import { publicProcedure } from "../procedures"
+import { HTTPException } from "hono/http-exception";
+import { z } from "zod";
+import { router } from "../__internals/router";
+import { publicProcedure } from "../procedures";
+import { postsTable } from "@/db/schema";
 
 export const postRouter = router({
   recent: publicProcedure.query(async ({ c, ctx }) => {
-    const { db } = ctx
+    const { db } = ctx;
+    const recentPost = await db.findFirst(postsTable, {
+      orderBy: { createdAt: "desc" },
+      cache: { id: "recent-post" },
+    });
 
     const recentPost = await db.post.findFirst({
       orderBy: { createdAt: "desc" },
       cache: { id: "recent-post" },
-    })
+    });
 
-    return c.superjson(recentPost)
+    return c.superjson(recentPost);
   }),
 
   create: publicProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx, c, input }) => {
-      const { name } = input
-      const { db } = ctx
-
-      const post = await db.post.create({
+      const { name } = input;
+      const { db } = ctx;
+      const post = await db.create(postsTable, {
         data: { name },
         cache: { id: "recent-post" },
-      })
+      });
 
-      return c.superjson({ ...post })
+      return c.superjson({ ...post });
     }),
-})
+});
